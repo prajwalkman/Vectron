@@ -1,0 +1,29 @@
+	auto app = FPaths::GameContentDir() + "vf.fga";
+	FString res;
+	FFileHelper::LoadFileToString(res, *app);
+
+	auto appOut = FPaths::GameContentDir() + "vfnew.fga";
+	FFileHelper::SaveStringToFile(res, *appOut);
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	FAssetRegistryModule& AssetRegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
+	TArray<FAssetData> AssetData;
+	const UClass* Class = UStaticMesh::StaticClass();
+	//FVectorFieldInstance f;
+	auto cn = UVectorFieldStatic::StaticClass()->GetName();
+	AssetRegistryModule.Get().GetAssetsByClass(*cn, AssetData);
+	for (auto v : AssetData) {
+		DLOG(v.PackagePath.ToString());
+		DLOG(v.AssetName.ToString());
+		v.PrintAssetData();
+		auto byteData = &Cast<UVectorFieldStatic>(v.GetAsset())->SourceData;
+		DLOGN(byteData->GetBulkDataSize());
+		DLOG(byteData->GetFilename());
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	auto world = GEditor->GetEditorWorldContext().World();
+	auto level = world->GetCurrentLevel();
+	auto actor = GEditor->AddActor(level, AVectorFieldVolume::StaticClass(), FTransform::Identity);
+	auto vol = Cast<AVectorFieldVolume>(actor);
