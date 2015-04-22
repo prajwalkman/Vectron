@@ -220,14 +220,11 @@ void FVectronModule::PluginButtonClicked()
 	m_escrowFga = new FFGAContents();
 	if (ParseFGA(m_escrowFga, (TCHAR*)*res, nullptr))
 	{
-		//for (auto d : m_escrowFga->Vectors) {
-		//	DLOG(d.ToString());
-		//}
 		InjectVolumeIntoScene();
 	}
 	else
 	{
-		DLOG("BUGGER!!");
+		DLOG("Could not parse FGA file.");
 	}
 }
 
@@ -245,19 +242,6 @@ void FVectronModule::InjectVolumeIntoScene() {
 	int32 z = 0;
 	float mult = 15.0;
 
-
-	//auto actor = GEditor->AddActor(Level, AStaticMeshActor::StaticClass(), FTransform::Identity);
-	auto obj = StaticLoadObject(UStaticMesh::StaticClass(), NULL, TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Cylinder.Shape_Cylinder'"));
-	UStaticMesh* mesh = NULL;
-	if (!obj) {
-		DLOG("OH COME ON");
-	}
-	else
-	{
-		mesh = Cast<UStaticMesh>(obj);
-	}
-	//auto mesh = Cast<UStaticMesh>(StaticLoadObject(UStaticMesh::StaticClass(), NULL, TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Cylinder'")));
-
 	for (auto vec : m_escrowFga->Vectors)
 	{
 		FTransform ft = FTransform::Identity;
@@ -265,7 +249,8 @@ void FVectronModule::InjectVolumeIntoScene() {
 		ft.SetRotation(nr);
 		ft.SetTranslation(FVector(x, y, z) * mult);
 		ft.SetScale3D(FVector(0.1, 0.1, 0.5));
-		auto act = GEditor->AddActor(Level, AStaticMeshActor::StaticClass(), ft);
+
+		// ft is the transform for our voxel
 
 		x += 1;
 		if (x > m_escrowFga->GridX)
