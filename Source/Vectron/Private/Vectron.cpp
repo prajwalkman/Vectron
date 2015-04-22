@@ -227,39 +227,7 @@ void FVectronModule::PluginButtonClicked()
 }
 
 void FVectronModule::InjectVolumeIntoScene() {
-	UVectorFieldStatic* VectorField = NULL;
-	VectorField = CastChecked<UVectorFieldStatic>(StaticConstructObject(
-		UVectorFieldStatic::StaticClass()));
-	VectorField->SizeX = m_escrowFga->GridX;
-	VectorField->SizeY = m_escrowFga->GridY;
-	VectorField->SizeZ = m_escrowFga->GridZ;
-	VectorField->Bounds = m_escrowFga->Bounds;
-
-	// SourceFilePath, Timestamp
-
-	const int32 VectorCount = m_escrowFga->Vectors.Num();
-	const int32 DestBufferSize = VectorCount * sizeof(FFloat16Color);
-	VectorField->SourceData.Lock(LOCK_READ_WRITE);
-	FFloat16Color* RESTRICT DestValues = (FFloat16Color*)VectorField->SourceData.Realloc(DestBufferSize);
-	const FVector* RESTRICT SrcValues = m_escrowFga->Vectors.GetData();
-	for (int32 VectorIndex = 0; VectorIndex < VectorCount; ++VectorIndex)
-	{
-		DestValues->R = SrcValues->X;
-		DestValues->G = SrcValues->Y;
-		DestValues->B = SrcValues->Z;
-		DestValues->A = 0.0f;
-		DestValues++;
-		SrcValues++;
-	}
-	VectorField->SourceData.Unlock();
-	VectorField->InitResource();
-	m_vectorField = VectorField;
-
-	auto World = GEditor->GetEditorWorldContext().World();
-	auto Level = World->GetCurrentLevel();
-	auto actor = GEditor->AddActor(Level, AVectorFieldVolume::StaticClass(), FTransform::Identity);
-	auto vol = Cast<AVectorFieldVolume>(actor);
-	vol->VectorFieldComponent->VectorField = VectorField;
+	// This is where we show a visualization of our field with a custom box and custom billboards for vectors
 }
 
 void FVectronModule::AddMenuExtension(FMenuBuilder& builder)

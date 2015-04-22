@@ -34,5 +34,7 @@ private:
 	FFGAContents* m_escrowFga;
 	UVectorFieldStatic* m_vectorField;
 
+	void ExportEscorwToFile(FString);
+
 	TSharedPtr<class FUICommandList> PluginCommands;
 };
