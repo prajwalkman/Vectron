@@ -16,7 +16,9 @@ public:
 	virtual void RegisterCommands() override
 	{
 		UI_COMMAND(PluginAction, "Vectron", "Execute Vectron action", EUserInterfaceActionType::Button, FInputGesture());
+		UI_COMMAND(OtherPluginAction, "Other Vectron", "Execute Roosevelt's Commands", EUserInterfaceActionType::Button, FInputGesture());
 	}
 
 	TSharedPtr< FUICommandInfo > PluginAction;
+	TSharedPtr< FUICommandInfo > OtherPluginAction;
 };

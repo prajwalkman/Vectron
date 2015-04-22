@@ -24,6 +24,7 @@ public:
 	
 	/** This function will be bound to Command.*/
 	void PluginButtonClicked();
+	void OtherPluginButtonClicked();
 	
 private:
 

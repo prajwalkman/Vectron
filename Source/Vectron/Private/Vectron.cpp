@@ -171,6 +171,11 @@ void FVectronModule::StartupModule()
 		FExecuteAction::CreateRaw(this, &FVectronModule::PluginButtonClicked),
 		FCanExecuteAction());
 
+	PluginCommands->MapAction(
+		FVectronCommands::Get().OtherPluginAction,
+		FExecuteAction::CreateRaw(this, &FVectronModule::OtherPluginButtonClicked),
+		FCanExecuteAction());
+
 	FLevelEditorModule& LevelEditorModule = FModuleManager::LoadModuleChecked<FLevelEditorModule>("LevelEditor");
 	{
 		TSharedPtr<FExtender> MenuExtender = MakeShareable(new FExtender());
@@ -226,8 +231,25 @@ void FVectronModule::PluginButtonClicked()
 	}
 }
 
+void FVectronModule::OtherPluginButtonClicked()
+{
+	DLOG("AS TEDDY COMMANDS!");
+}
+
 void FVectronModule::InjectVolumeIntoScene() {
 	// This is where we show a visualization of our field with a custom box and custom billboards for vectors
+	auto World = GEditor->GetEditorWorldContext().World();
+	auto Level = World->GetCurrentLevel();
+	auto i = 0.0;
+	for (auto vec : m_escrowFga->Vectors)
+	{
+		FTransform ft = FTransform::Identity;
+		FQuat nr = FQuat::MakeFromEuler(vec);
+		ft.SetRotation(nr);
+		ft.SetTranslation(FVector(i, 0.0, 0.0));
+		GEditor->AddActor(Level, AStaticMeshActor::StaticClass(), ft);
+		i += 1.0;
+	}
 }
 
 void FVectronModule::AddMenuExtension(FMenuBuilder& builder)
@@ -251,6 +273,14 @@ void FVectronModule::AddToolbarExtension(FToolBarBuilder &builder)
 		FVectronCommands::Get().PluginAction->GetLabel(),
 		FVectronCommands::Get().PluginAction->GetDescription(),
 		FVectronCommands::Get().PluginAction->GetIcon(),
+		NAME_None);
+
+	builder.AddToolBarButton(
+		FVectronCommands::Get().OtherPluginAction,
+		NAME_None,
+		FVectronCommands::Get().OtherPluginAction->GetLabel(),
+		FVectronCommands::Get().OtherPluginAction->GetDescription(),
+		FVectronCommands::Get().OtherPluginAction->GetIcon(),
 		NAME_None);
 }
 
