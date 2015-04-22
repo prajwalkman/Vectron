@@ -1,6 +1,7 @@
 // Some copyright should be here...
 
 #include "Vectron.h"
+#include "Engine.h"
 #include "AssetRegistryModule.h"
 #include "VectorField/VectorFieldStatic.h"
 #include "AssetData.h"

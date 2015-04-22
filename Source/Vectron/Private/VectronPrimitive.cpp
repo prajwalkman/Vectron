@@ -1,24 +1,26 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "UE4Vectron.h"
+#include "VectronPrivatePCH.h"
 #include "VectronPrimitive.h"
-
 
 // Sets default values
 AVectronPrimitive::AVectronPrimitive()
+{}
+
+AVectronPrimitive::AVectronPrimitive(const class FObjectInitializer& PCIP) : Super(PCIP)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> StaticMeshSpherePrimitive(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Sphere'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> StaticMeshSpherePrimitive(TEXT("UAsset'/Engine/Content/EngineMeshes/Sphere.uasset'"));
 
 	primitiveMesh = StaticMeshSpherePrimitive.Object;
-
+	
 	primitiveMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Primitive VF Modifier"));
 	primitiveMeshComponent->SetStaticMesh(primitiveMesh);
 
 	SetupSMComponentWithCollision(primitiveMeshComponent);
-
+	
 	RootComponent = primitiveMeshComponent;
 }
 

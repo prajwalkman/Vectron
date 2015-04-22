@@ -5,19 +5,10 @@
 #include "GameFramework/Actor.h"
 #include "VectronBoundingBox.generated.h"
 
-struct FFGAContents
-{
-	int32 GridX;
-	int32 GridY;
-	int32 GridZ;
-	FBox Bounds;
-	TArray<FVector> Vectors;
-};
-
 UCLASS()
-class UE4VECTRON_API AVectronBoundingBox : public AActor
+class AVectronBoundingBox : public AActor
 {
-	GENERATED_BODY()
+	GENERATED_UCLASS_BODY()
 	
 public:	
 	// Sets default values for this actor's properties

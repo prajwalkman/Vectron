@@ -6,9 +6,9 @@
 #include "VectronPrimitive.generated.h"
 
 UCLASS()
-class UE4VECTRON_API AVectronPrimitive : public AActor
+class AVectronPrimitive : public AActor
 {
-	GENERATED_BODY()
+	GENERATED_UCLASS_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
