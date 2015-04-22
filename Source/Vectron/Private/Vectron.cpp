@@ -240,15 +240,45 @@ void FVectronModule::InjectVolumeIntoScene() {
 	// This is where we show a visualization of our field with a custom box and custom billboards for vectors
 	auto World = GEditor->GetEditorWorldContext().World();
 	auto Level = World->GetCurrentLevel();
-	auto i = 0.0;
+	int32 x = 0;
+	int32 y = 0;
+	int32 z = 0;
+	float mult = 15.0;
+
+
+	//auto actor = GEditor->AddActor(Level, AStaticMeshActor::StaticClass(), FTransform::Identity);
+	auto obj = StaticLoadObject(UStaticMesh::StaticClass(), NULL, TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Cylinder.Shape_Cylinder'"));
+	UStaticMesh* mesh = NULL;
+	if (!obj) {
+		DLOG("OH COME ON");
+	}
+	else
+	{
+		mesh = Cast<UStaticMesh>(obj);
+	}
+	//auto mesh = Cast<UStaticMesh>(StaticLoadObject(UStaticMesh::StaticClass(), NULL, TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Cylinder'")));
+
 	for (auto vec : m_escrowFga->Vectors)
 	{
 		FTransform ft = FTransform::Identity;
 		FQuat nr = FQuat::MakeFromEuler(vec);
 		ft.SetRotation(nr);
-		ft.SetTranslation(FVector(i, 0.0, 0.0));
-		GEditor->AddActor(Level, AStaticMeshActor::StaticClass(), ft);
-		i += 1.0;
+		ft.SetTranslation(FVector(x, y, z) * mult);
+		ft.SetScale3D(FVector(0.1, 0.1, 0.5));
+		auto act = GEditor->AddActor(Level, AStaticMeshActor::StaticClass(), ft);
+
+		x += 1;
+		if (x > m_escrowFga->GridX)
+		{
+			x = 0;
+			y += 1;
+			if (y > m_escrowFga->GridY)
+			{
+				y = 0;
+				z += 1;
+			}
+		}
+
 	}
 }
 
