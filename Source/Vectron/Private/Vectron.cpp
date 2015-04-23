@@ -13,9 +13,6 @@ static const FName VectronTabName("Vectron");
 
 #define LOCTEXT_NAMESPACE "FVectronModule"
 
-#define DLOG(text) if (GLog) GLog->Log(text)
-#define DLOGN(num) if (GLog) GLog->Log(FString::FromInt(num))
-#define DLOGF(flt) if (GLog) GLog->Log(FString::SanitizeFloat(flt))
 
 /**
 * Walks the stream looking for the specified character. Replaces the character
@@ -190,6 +187,7 @@ void FVectronModule::StartupModule()
 
 		LevelEditorModule.GetToolBarExtensibilityManager()->AddExtender(ToolbarExtender);
 	}
+
 }
 
 void FVectronModule::ShutdownModule()
@@ -221,6 +219,7 @@ void FVectronModule::PluginButtonClicked()
 	if (ParseFGA(m_escrowFga, (TCHAR*)*res, nullptr))
 	{
 		InjectVolumeIntoScene();
+		DLOGN(m_escrowFga->GridX);
 	}
 	else
 	{

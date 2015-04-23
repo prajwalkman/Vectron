@@ -12,12 +12,12 @@ AVectronPrimitive::AVectronPrimitive(const class FObjectInitializer& PCIP) : Sup
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> StaticMeshSpherePrimitive(TEXT("UAsset'/Engine/Content/EngineMeshes/Sphere.uasset'"));
+	//static ConstructorHelpers::FObjectFinder<UStaticMesh> StaticMeshSpherePrimitive(TEXT("UAsset'/Engine/Content/EngineMeshes/Sphere.uasset'"));
 
-	primitiveMesh = StaticMeshSpherePrimitive.Object;
+	//primitiveMesh = StaticMeshSpherePrimitive.Object;
 	
 	primitiveMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Primitive VF Modifier"));
-	primitiveMeshComponent->SetStaticMesh(primitiveMesh);
+	//primitiveMeshComponent->SetStaticMesh(primitiveMesh);
 
 	SetupSMComponentWithCollision(primitiveMeshComponent);
 	

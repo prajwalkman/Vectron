@@ -11,7 +11,6 @@ AVectronBoundingBox::AVectronBoundingBox(const class FObjectInitializer& PCIP) :
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	// setFFGAContents(importData);
 }
 
 // Called when the game starts or when spawned
@@ -51,4 +50,12 @@ FVector AVectronBoundingBox::getVoxelPosition(int32 x, int32 y, int32 z)
 
 	// translate the calculated voxel position by origin of the actor to get the correct voxel position in the world
 	return FVector(indexes * voxelPosition + origin);
+}
+
+void AVectronBoundingBox::PostActorCreated()
+{
+	Super::PostInitializeComponents();
+
+	setFFGAContents(FVectronModule::Get().m_escrowFga);
+	test = m_bbContents->GridX;
 }

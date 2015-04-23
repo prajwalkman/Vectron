@@ -14,6 +14,8 @@ public:
 	// Sets default values for this actor's properties
 	AVectronBoundingBox();
 
+	virtual void PostActorCreated() override;
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
@@ -21,6 +23,9 @@ public:
 	virtual void Tick( float DeltaSeconds ) override;
 
 	FFGAContents* m_bbContents;
+
+	UPROPERTY(VisibleAnywhere, Category = "FGA")
+	int32 test;
 	
 	void setFFGAContents(FFGAContents* importedValue);
 
