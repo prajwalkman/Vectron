@@ -4,15 +4,26 @@
 #include "VectronBoundingBox.h"
 
 // Sets default values
-AVectronBoundingBox::AVectronBoundingBox()
-{}
+//AVectronBoundingBox::AVectronBoundingBox()
+//{}
 
 AVectronBoundingBox::AVectronBoundingBox(const class FObjectInitializer& PCIP) : Super(PCIP)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	DLOG("In Cons");
 
-	m_contentReference = FFGAContents();
+}
+
+void AVectronBoundingBox::OnConstruction(const FTransform& ft)
+{
+	DLOG("InOnCons");
+	Super::OnConstruction(ft);
+
+	if (FVectronModule::Get().m_escrowFga == nullptr) return;
+	setFFGAContents(FVectronModule::Get().m_escrowFga);
+	RenderField();
+
 }
 
 // Called before Actor components are initialized
@@ -22,14 +33,26 @@ void AVectronBoundingBox::PreInitializeComponents()
 
 	setFFGAContents(FVectronModule::Get().m_escrowFga);
 
-	m_contentReference = *m_bbContents;
+	DLOG("In PreInitComp");
+	
+}
+
+void AVectronBoundingBox::PostInitializeComponents()
+{
+
+	Super::PostInitializeComponents();
+
+	DLOG("In PostInitComp");
 }
 
 // Called when the game starts or when spawned
 void AVectronBoundingBox::BeginPlay()
 {
 	Super::BeginPlay();
+}
 
+void AVectronBoundingBox::RenderField()
+{
 	for (size_t i = 0; i < m_bbContents->Vectors.Num(); i++) {
 		m_bbContents->Vectors[i].Normalize();
 		auto ri = getResolvedIndex(i);
@@ -42,7 +65,6 @@ void AVectronBoundingBox::BeginPlay()
 		auto vrayend = vpos + (m_bbContents->Vectors[i] * 20.0);
 		DrawDebugDirectionalArrow(GetWorld(), vpos, vrayend, 3.0f, FColor::Black, true);
 	}
-	
 }
 
 // Called every frame

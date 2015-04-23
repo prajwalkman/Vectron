@@ -9,13 +9,17 @@ UCLASS()
 class AVectronBoundingBox : public AActor
 {
 	GENERATED_UCLASS_BODY()
+
+	void RenderField();
 	
 public:	
-	// Sets default values for this actor's properties
-	AVectronBoundingBox();
 
 	// Called before Actor components are initialized
 	virtual void PreInitializeComponents() override;
+
+	virtual void PostInitializeComponents() override;
+
+	virtual void OnConstruction(const FTransform&) override;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -26,9 +30,6 @@ public:
 	FFGAContents* m_bbContents;
 
 	void setFFGAContents(FFGAContents* importedValue);
-
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Voxel Data")
-	FFGAContents m_contentReference;
 
 	UFUNCTION(BlueprintCallable, Category="Voxel Data")
 	FVector getVoxelPosition(int32 x, int32 y, int32 z);
