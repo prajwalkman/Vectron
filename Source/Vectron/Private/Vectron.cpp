@@ -146,7 +146,7 @@ static bool ParseFGA(
 	}
 
 	for (uint16 i = 0; i < OValues.Num(); i += 3) {
-		OutContents->Vectors[i / 3] = FVector(Values[i], Values[i + 1], Values[i + 2]);
+		OutContents->Vectors[i / 3] = FVector(OValues[i], OValues[i + 1], OValues[i + 2]);
 	}
 
 	return true;
@@ -219,7 +219,6 @@ void FVectronModule::PluginButtonClicked()
 	if (ParseFGA(m_escrowFga, (TCHAR*)*res, nullptr))
 	{
 		InjectVolumeIntoScene();
-		DLOGN(m_escrowFga->GridX);
 	}
 	else
 	{
@@ -234,36 +233,36 @@ void FVectronModule::OtherPluginButtonClicked()
 
 void FVectronModule::InjectVolumeIntoScene() {
 	// This is where we show a visualization of our field with a custom box and custom billboards for vectors
-	auto World = GEditor->GetEditorWorldContext().World();
-	auto Level = World->GetCurrentLevel();
-	int32 x = 0;
-	int32 y = 0;
-	int32 z = 0;
-	float mult = 15.0;
+	//auto World = GEditor->GetEditorWorldContext().World();
+	//auto Level = World->GetCurrentLevel();
+	//int32 x = 0;
+	//int32 y = 0;
+	//int32 z = 0;
+	//float mult = 15.0;
 
-	for (auto vec : m_escrowFga->Vectors)
-	{
-		FTransform ft = FTransform::Identity;
-		FQuat nr = FQuat::MakeFromEuler(vec);
-		ft.SetRotation(nr);
-		ft.SetTranslation(FVector(x, y, z) * mult);
-		ft.SetScale3D(FVector(0.1, 0.1, 0.5));
+	//for (auto vec : m_escrowFga->Vectors)
+	//{
+	//	FTransform ft = FTransform::Identity;
+	//	FQuat nr = FQuat::MakeFromEuler(vec);
+	//	ft.SetRotation(nr);
+	//	ft.SetTranslation(FVector(x, y, z) * mult);
+	//	ft.SetScale3D(FVector(0.1, 0.1, 0.5));
 
-		// ft is the transform for our voxel
+	//	// ft is the transform for our voxel
 
-		x += 1;
-		if (x > m_escrowFga->GridX)
-		{
-			x = 0;
-			y += 1;
-			if (y > m_escrowFga->GridY)
-			{
-				y = 0;
-				z += 1;
-			}
-		}
+	//	x += 1;
+	//	if (x > m_escrowFga->GridX)
+	//	{
+	//		x = 0;
+	//		y += 1;
+	//		if (y > m_escrowFga->GridY)
+	//		{
+	//			y = 0;
+	//			z += 1;
+	//		}
+	//	}
 
-	}
+	//}
 }
 
 void FVectronModule::AddMenuExtension(FMenuBuilder& builder)

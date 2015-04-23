@@ -27,7 +27,7 @@ public:
 
 	void setFFGAContents(FFGAContents* importedValue);
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Voxel Data")
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Voxel Data")
 	FFGAContents m_contentReference;
 
 	UFUNCTION(BlueprintCallable, Category="Voxel Data")

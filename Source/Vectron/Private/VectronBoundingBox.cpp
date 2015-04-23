@@ -21,6 +21,7 @@ void AVectronBoundingBox::PreInitializeComponents()
 	Super::PreInitializeComponents();
 
 	setFFGAContents(FVectronModule::Get().m_escrowFga);
+
 	m_contentReference = *m_bbContents;
 }
 
@@ -28,6 +29,19 @@ void AVectronBoundingBox::PreInitializeComponents()
 void AVectronBoundingBox::BeginPlay()
 {
 	Super::BeginPlay();
+
+	for (size_t i = 0; i < m_bbContents->Vectors.Num(); i++) {
+		m_bbContents->Vectors[i].Normalize();
+		auto ri = getResolvedIndex(i);
+		auto vpos = getVoxelPosition(ri.X, ri.Y, ri.Z);
+		if (m_bbContents->Vectors[i].IsNearlyZero(0.001f))
+		{
+			DrawDebugPoint(GetWorld(), vpos, 3.0f, FColor::Black, true);
+			continue;
+		}
+		auto vrayend = vpos + (m_bbContents->Vectors[i] * 20.0);
+		DrawDebugDirectionalArrow(GetWorld(), vpos, vrayend, 3.0f, FColor::Black, true);
+	}
 	
 }
 
@@ -67,6 +81,12 @@ FVector AVectronBoundingBox::getResolvedIndex(int32 index)
 {
 	FVector resolvedIndex(0, 0, 0);
 
+	//FVector resolvedIndex2(0, 0, 0);
+
+	//resolvedIndex2.X = index % m_bbContents->GridX;
+	//resolvedIndex2.Y = (index / m_bbContents->GridX) % m_bbContents->GridY;
+	//resolvedIndex2.Z = index / (m_bbContents->GridX * m_bbContents->GridY);
+
 	int32 bitsX = (int)(floor(log2f(m_bbContents->GridX - 1)) + 1);
 	int32 bitsY = (int)(floor(log2f(m_bbContents->GridY - 1)) + 1);
 	int32 bitsZ = (int)(floor(log2f(m_bbContents->GridZ - 1)) + 1);
@@ -78,7 +98,7 @@ FVector AVectronBoundingBox::getResolvedIndex(int32 index)
 	shifter = ((1 << bitsZ) - 1) << (bitsX + bitsY);
 	resolvedIndex.Z = (shifter & index) >> (bitsX + bitsY);
 
-	DLOG("Resolved Index: " + resolvedIndex.ToString());
+	//DLOG("Resolved Index: " + resolvedIndex.ToString());
 	
 	return resolvedIndex;
 }
