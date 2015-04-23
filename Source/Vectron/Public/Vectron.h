@@ -15,19 +15,19 @@ struct FFGAContents
 {
 	GENERATED_USTRUCT_BODY()
 
-	UPROPERTY(EditAnywhere, Category = "FGA")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FGA")
 	int32 GridX;
 	
-	UPROPERTY(EditAnywhere, Category = "FGA")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FGA")
 	int32 GridY;
 	
-	UPROPERTY(EditAnywhere, Category = "FGA")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FGA")
 	int32 GridZ;
 	
-	UPROPERTY(EditAnywhere, Category = "FGA")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FGA")
 	FBox Bounds;
 	
-	UPROPERTY(EditAnywhere, Category = "FGA")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FGA")
 	TArray<FVector> Vectors;
 };
 

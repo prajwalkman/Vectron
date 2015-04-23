@@ -20,6 +20,9 @@ public:
 	// Called every frame
 	virtual void Tick( float DeltaSeconds ) override;
 
+	// Called when the actor is spawned
+	virtual void PostActorCreated() override;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mesh")
 	UStaticMesh* primitiveMesh;
 
