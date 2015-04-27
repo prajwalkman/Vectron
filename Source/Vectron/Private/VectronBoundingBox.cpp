@@ -101,26 +101,32 @@ FVector AVectronBoundingBox::getVoxelPosition(int32 x, int32 y, int32 z)
 
 FVector AVectronBoundingBox::getResolvedIndex(int32 index)
 {
-	FVector resolvedIndex(0, 0, 0);
 
-	//FVector resolvedIndex2(0, 0, 0);
+	/* Method derived from Information Theory and bit hacking (unsound?) */
+	//FVector resolvedIndex(0, 0, 0);
 
-	//resolvedIndex2.X = index % m_bbContents->GridX;
-	//resolvedIndex2.Y = (index / m_bbContents->GridX) % m_bbContents->GridY;
-	//resolvedIndex2.Z = index / (m_bbContents->GridX * m_bbContents->GridY);
+	//int32 bitsX = (int)(floor(log2f(m_bbContents->GridX - 1)) + 1);
+	//int32 bitsY = (int)(floor(log2f(m_bbContents->GridY - 1)) + 1);
+	//int32 bitsZ = (int)(floor(log2f(m_bbContents->GridZ - 1)) + 1);
+	////DLOG("X bits: %d, Y bits: %d, Z bits: %d", bitsX, bitsY, bitsZ);
+	//int32 shifter = ((1 << bitsX) - 1);
+	//resolvedIndex.X = shifter & index;
+	//shifter = (((1 << bitsY) - 1) << bitsX);
+	//resolvedIndex.Y = (shifter & index) >> bitsX;
+	//shifter = ((1 << bitsZ) - 1) << (bitsX + bitsY);
+	//resolvedIndex.Z = (shifter & index) >> (bitsX + bitsY);
 
-	int32 bitsX = (int)(floor(log2f(m_bbContents->GridX - 1)) + 1);
-	int32 bitsY = (int)(floor(log2f(m_bbContents->GridY - 1)) + 1);
-	int32 bitsZ = (int)(floor(log2f(m_bbContents->GridZ - 1)) + 1);
-	//DLOG("X bits: %d, Y bits: %d, Z bits: %d", bitsX, bitsY, bitsZ);
-	int32 shifter = ((1 << bitsX) - 1);
-	resolvedIndex.X = shifter & index;
-	shifter = (((1 << bitsY) - 1) << bitsX);
-	resolvedIndex.Y = (shifter & index) >> bitsX;
-	shifter = ((1 << bitsZ) - 1) << (bitsX + bitsY);
-	resolvedIndex.Z = (shifter & index) >> (bitsX + bitsY);
+	////DLOG("Resolved Index: " + resolvedIndex.ToString());
+	//
+	//return resolvedIndex;
 
-	//DLOG("Resolved Index: " + resolvedIndex.ToString());
-	
-	return resolvedIndex;
+
+
+	/* Simpler method */
+	FVector resolvedIndex2(0, 0, 0);
+
+	resolvedIndex2.X = index % m_bbContents->GridX;
+	resolvedIndex2.Y = (index / m_bbContents->GridX) % m_bbContents->GridY;
+	resolvedIndex2.Z = index / (m_bbContents->GridX * m_bbContents->GridY);
+	return resolvedIndex2;
 }
