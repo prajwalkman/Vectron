@@ -29,6 +29,7 @@ public class Vectron : ModuleRules
                 "AssetRegistry",
                 "AssetTools",
                 "CollectionManager",
+                "PropertyEditor"
             }
         );
 

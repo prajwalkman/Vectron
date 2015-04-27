@@ -7,7 +7,7 @@
 #include "VectronCommands.h"
 
 #include "LevelEditor.h"
-
+#include "Classes/VectronBoundingBox.h"
 
 static const FName VectronTabName("Vectron");
 
@@ -210,10 +210,30 @@ void FVectronModule::PluginButtonClicked()
 	//{
 	//	m_escrowFga = new FFGAContents();
 	//}
+
+
+	FEditorDelegates::LoadSelectedAssetsIfNeeded.Broadcast();
+
+	USelection *Selection = GEditor->GetSelectedObjects();
+	if (Selection == nullptr) return;
+	UObject *SelectedActor = Selection->GetTop<UObject>();
+	if (SelectedActor == nullptr) return;
+	if (SelectedActor->GetClass() != UVectorFieldStatic::StaticClass())
+	{
+		return;
+	}
+	auto pathName = SelectedActor->GetPathName();
+	pathName = pathName.Replace(TEXT("/Game/"), TEXT(""));
+	FString a, b;
+	pathName.Split(TEXT("."), &a, &b);
 	
-	auto app = FPaths::GameContentDir() + "vf.fga";
+	auto app = FPaths::GameContentDir() + a + ".fga";
 	FString res;
-	FFileHelper::LoadFileToString(res, *app);
+	if (!FFileHelper::LoadFileToString(res, *app))
+	{
+		DLOG("Could not find file: " + app);
+		return;
+	}
 
 	m_escrowFga = new FFGAContents();
 	if (ParseFGA(m_escrowFga, (TCHAR*)*res, nullptr))
@@ -233,36 +253,9 @@ void FVectronModule::OtherPluginButtonClicked()
 
 void FVectronModule::InjectVolumeIntoScene() {
 	// This is where we show a visualization of our field with a custom box and custom billboards for vectors
-	//auto World = GEditor->GetEditorWorldContext().World();
-	//auto Level = World->GetCurrentLevel();
-	//int32 x = 0;
-	//int32 y = 0;
-	//int32 z = 0;
-	//float mult = 15.0;
-
-	//for (auto vec : m_escrowFga->Vectors)
-	//{
-	//	FTransform ft = FTransform::Identity;
-	//	FQuat nr = FQuat::MakeFromEuler(vec);
-	//	ft.SetRotation(nr);
-	//	ft.SetTranslation(FVector(x, y, z) * mult);
-	//	ft.SetScale3D(FVector(0.1, 0.1, 0.5));
-
-	//	// ft is the transform for our voxel
-
-	//	x += 1;
-	//	if (x > m_escrowFga->GridX)
-	//	{
-	//		x = 0;
-	//		y += 1;
-	//		if (y > m_escrowFga->GridY)
-	//		{
-	//			y = 0;
-	//			z += 1;
-	//		}
-	//	}
-
-	//}
+	auto World = GEditor->GetEditorWorldContext().World();
+	auto Level = World->GetCurrentLevel();
+	m_activeActor = GEditor->AddActor(Level, AVectronBoundingBox::StaticClass(), FTransform::Identity);
 }
 
 void FVectronModule::AddMenuExtension(FMenuBuilder& builder)

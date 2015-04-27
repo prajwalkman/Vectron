@@ -45,6 +45,8 @@ public:
 
 	FFGAContents* m_escrowFga;
 
+	AActor* m_activeActor;
+
 	static inline FVectronModule& Get()
 	{
 		return FModuleManager::LoadModuleChecked< FVectronModule >("Vectron");
