@@ -12,7 +12,6 @@ AVectronBoundingBox::AVectronBoundingBox(const class FObjectInitializer& PCIP) :
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	DLOG("In Cons");
-
 }
 
 void AVectronBoundingBox::OnConstruction(const FTransform& ft)
@@ -133,4 +132,9 @@ FVector AVectronBoundingBox::getResolvedIndex(int32 index)
 	resolvedIndex2.Y = (index / m_bbContents->GridX) % m_bbContents->GridY;
 	resolvedIndex2.Z = index / (m_bbContents->GridX * m_bbContents->GridY);
 	return resolvedIndex2;
+}
+
+void AVectronBoundingBox::ManualUpdate()
+{
+	DLOG("MANUALLY UPDATING STUFF!");
 }

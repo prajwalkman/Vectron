@@ -11,6 +11,8 @@
 #define DLOGN(num) if (GLog) GLog->Log(FString::FromInt(num))
 #define DLOGF(flt) if (GLog) GLog->Log(FString::SanitizeFloat(flt))
 
+DECLARE_DELEGATE(FCallbackDelegate);
+
 USTRUCT()
 struct FFGAContents
 {
@@ -64,4 +66,7 @@ private:
 	void ExportEscorwToFile(FString);
 
 	TSharedPtr<class FUICommandList> PluginCommands;
+
+	FCallbackDelegate ManualUpdateDelegate;
+	bool holding = false;
 };
