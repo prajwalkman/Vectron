@@ -247,8 +247,11 @@ void FVectronModule::PluginButtonClicked()
 
 void FVectronModule::OtherPluginButtonClicked()
 {
-	AVectronBoundingBox exp = USelection::GetSelectedObject(0);
-	FFGAContents* fga = exp.getFFGAContents();
+	FEditorDelegates::LoadSelectedAssetsIfNeeded.Broadcast();
+	USelection *Selection = GEditor->GetSelectedObjects();
+	check(Selection != NULL);
+	AVectronBoundingBox *SelectedActor = Selection->GetTop<UObject>();
+	FFGAContents* fga = exp->getFFGAContents();
 	FString file = FString::Printf(TEXT("%i, %i, %i,\r\n"), fga->GridX, fga->GridY, fga->GridZ);
 	file += FString::Printf(TEXT("%f, %f, %f,\r\n"), fga->Bounds.Min.X, fga->Bounds.Min.Y, fga->Bounds.Min.Z);
 	file += FString::Printf(TEXT("%f, %f, %f,\r\n"), fga->Bounds.Max.X, fga->Bounds.Max.Y, fga->Bounds.Max.Z);
@@ -258,7 +261,6 @@ void FVectronModule::OtherPluginButtonClicked()
 	}
 	auto appOut = FPaths::GameContentDir() + "vfnew.fga";
 	FFileHelper::SaveStringToFile(file, *appOut);
-	DLOG("AS TEDDY COMMANDS!");
 }
 
 void FVectronModule::InjectVolumeIntoScene() {
