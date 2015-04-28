@@ -149,3 +149,8 @@ FVector AVectronBoundingBox::getResolvedIndex(int32 index)
 	resolvedIndex2.Z = index / (m_bbContents->GridX * m_bbContents->GridY);
 	return resolvedIndex2;
 }
+
+void AVectronBoundingBox::ManualUpdate()
+{
+	DLOG("MANUALLY UPDATING STUFF!");
+}

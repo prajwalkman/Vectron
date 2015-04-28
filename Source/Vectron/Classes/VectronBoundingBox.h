@@ -39,4 +39,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Voxel Data")
 	FVector getResolvedIndex(int32 index);
+
+	void ManualUpdate();
+
 };

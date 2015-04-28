@@ -210,6 +210,12 @@ void FVectronModule::PluginButtonClicked()
 	//	m_escrowFga = new FFGAContents();
 	//}
 
+	if (holding == true)
+	{
+		ManualUpdateDelegate.Execute();
+		return;
+	}
+
 
 	FEditorDelegates::LoadSelectedAssetsIfNeeded.Broadcast();
 
@@ -238,6 +244,7 @@ void FVectronModule::PluginButtonClicked()
 	if (ParseFGA(m_escrowFga, (TCHAR*)*res, nullptr))
 	{
 		InjectVolumeIntoScene();
+		holding = true;
 	}
 	else
 	{
@@ -275,6 +282,8 @@ void FVectronModule::InjectVolumeIntoScene() {
 	auto World = GEditor->GetEditorWorldContext().World();
 	auto Level = World->GetCurrentLevel();
 	m_activeActor = GEditor->AddActor(Level, AVectronBoundingBox::StaticClass(), FTransform::Identity);
+	auto avbb = Cast<AVectronBoundingBox>(m_activeActor);
+	ManualUpdateDelegate.BindUObject(avbb, &AVectronBoundingBox::ManualUpdate);
 }
 
 void FVectronModule::AddMenuExtension(FMenuBuilder& builder)
