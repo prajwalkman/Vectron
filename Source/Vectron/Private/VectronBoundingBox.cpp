@@ -57,6 +57,7 @@ void AVectronBoundingBox::BeginPlay()
 
 void AVectronBoundingBox::RenderField()
 {
+	FlushPersistentDebugLines(GetWorld());
 	for (size_t i = 0; i < m_bbContents->Vectors.Num(); i++) {
 		m_bbContents->Vectors[i].Normalize();
 		auto ri = getResolvedIndex(i);
@@ -74,6 +75,7 @@ void AVectronBoundingBox::RenderField()
 			auto cc = Cast<AVectronPrimitive>(c);
 			if (cc)
 			{
+				DLOG("Found a primitive, adding its value");
 				dir += cc->fieldDirectionAtPosition(dir);
 			}
 		}
@@ -153,4 +155,5 @@ FVector AVectronBoundingBox::getResolvedIndex(int32 index)
 void AVectronBoundingBox::ManualUpdate()
 {
 	DLOG("MANUALLY UPDATING STUFF!");
+	RenderField();
 }

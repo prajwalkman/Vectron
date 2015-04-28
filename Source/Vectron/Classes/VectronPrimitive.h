@@ -27,7 +27,7 @@ public:
 	UStaticMesh* primitiveMesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mesh")
-	double intensity;
+	float intensity;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh")
 	UStaticMeshComponent* primitiveMeshComponent;

@@ -213,6 +213,7 @@ void FVectronModule::PluginButtonClicked()
 	if (holding == true)
 	{
 		ManualUpdateDelegate.Execute();
+		GEditor->RedrawAllViewports();
 		return;
 	}
 

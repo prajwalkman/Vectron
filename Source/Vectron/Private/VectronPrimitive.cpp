@@ -59,7 +59,7 @@ void AVectronPrimitive::PreInitializeComponents()
 {
 	Super::PreInitializeComponents();
 
-//	primitiveMeshComponent->SetStaticMesh(primitiveMesh);
+	//primitiveMeshComponent->SetStaticMesh(primitiveMesh);
 }
 
 FVector AVectronPrimitive::fieldDirectionAtPosition(FVector voxelPosition)
@@ -68,7 +68,7 @@ FVector AVectronPrimitive::fieldDirectionAtPosition(FVector voxelPosition)
 	{
 		FVector dir = voxelPosition - GetActorLocation();
 		dir.Normalize();
-		return intensity * (dir);
+		return 10.0 * (dir);
 	}
 	return FVector::ZeroVector;
 }
