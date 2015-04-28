@@ -81,6 +81,7 @@ void AVectronBoundingBox::RenderField()
 		auto vrayend = vpos + (dir * 20.0);
 		DrawDebugDirectionalArrow(GetWorld(), vpos, vrayend, 3.0f, FColor::Black, true);
 	}
+	DrawDebugBox(GetWorld(), GetActorLocation(), m_bbContents->Bounds.GetExtent(), FColor::Blue, true);
 }
 
 // Called every frame
@@ -103,20 +104,17 @@ FVector AVectronBoundingBox::getVoxelPosition(int32 x, int32 y, int32 z)
 {
 	FVector origin = GetActorLocation();
 	FVector size = m_bbContents->Bounds.GetSize();
-	FVector voxelPosition(
-		size.X / m_bbContents->GridX / 2,
-		size.Y / m_bbContents->GridY / 2,
-		size.Z / m_bbContents->GridZ / 2
-	);
+	FVector grids(m_bbContents->GridX, m_bbContents->GridY, m_bbContents->GridZ);
+
+	FVector localPos(size / grids);
 
 	// Translate indexes from [0, Max) to [-Max/2, Max/2) because the origin for actors is at the center
-	x -= m_bbContents->GridX / 2;
-	y -= m_bbContents->GridY / 2;
-	z -= m_bbContents->GridZ / 2;
-	FVector indexes(x, y, z);
+	FVector transform(x, y, z);
+	transform -= grids / 2.0f;
+	transform += size / grids / 200.0f;
 
 	// translate the calculated voxel position by origin of the actor to get the correct voxel position in the world
-	return FVector(indexes * voxelPosition + origin);
+	return FVector(transform * localPos + origin);
 }
 
 FVector AVectronBoundingBox::getResolvedIndex(int32 index)

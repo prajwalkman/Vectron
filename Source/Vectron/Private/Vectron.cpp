@@ -194,8 +194,6 @@ void FVectronModule::ShutdownModule()
 	// This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
 	// we call this function before unloading the module.
 
-	//if (m_escrowFga != nullptr) delete m_escrowFga;
-
 	FVectronStyle::Shutdown();
 
 	FVectronCommands::Unregister();
@@ -204,11 +202,6 @@ void FVectronModule::ShutdownModule()
 void FVectronModule::PluginButtonClicked()
 {
 	// Put your "OnButtonClicked" stuff here
-
-	//if (m_escrowFga == nullptr)
-	//{
-	//	m_escrowFga = new FFGAContents();
-	//}
 
 	if (holding == true)
 	{
@@ -265,12 +258,12 @@ void FVectronModule::OtherPluginButtonClicked()
 	}
 	DLOG(SelectedActor->GetClass()->GetDesc());
 	FFGAContents* fga = SelectedActor->getFFGAContents();
-	FString file = FString::Printf(TEXT("%i, %i, %i,"), fga->GridX, fga->GridY, fga->GridZ);
-	file += FString::Printf(TEXT("%f, %f, %f,"), fga->Bounds.Min.X, fga->Bounds.Min.Y, fga->Bounds.Min.Z);
-	file += FString::Printf(TEXT("%f, %f, %f,"), fga->Bounds.Max.X, fga->Bounds.Max.Y, fga->Bounds.Max.Z);
+	FString file = FString::Printf(TEXT("%i, %i, %i,\n"), fga->GridX, fga->GridY, fga->GridZ);
+	file += FString::Printf(TEXT("%f, %f, %f,\n"), fga->Bounds.Min.X, fga->Bounds.Min.Y, fga->Bounds.Min.Z);
+	file += FString::Printf(TEXT("%f, %f, %f,\n"), fga->Bounds.Max.X, fga->Bounds.Max.Y, fga->Bounds.Max.Z);
 	for (int32 i = 0; i < fga->Vectors.Num(); i++)
 	{
-		file += FString::Printf(TEXT("%f, %f, %f,"), fga->Vectors[i].X*100, fga->Vectors[i].Y*100, fga->Vectors[i].Z*100);
+		file += FString::Printf(TEXT("%f, %f, %f,\n"), fga->Vectors[i].X*100, fga->Vectors[i].Y*100, fga->Vectors[i].Z*100);
 	}
 	DLOG(file);
 	auto appOut = FPaths::GameContentDir() + "vfnew.fga";
