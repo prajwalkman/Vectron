@@ -29,6 +29,7 @@ public:
 
 	FFGAContents* m_bbContents;
 
+	FFGAContents* getFFGAContents();
 	void setFFGAContents(FFGAContents* importedValue);
 
 	UFUNCTION(BlueprintCallable, Category="Voxel Data")

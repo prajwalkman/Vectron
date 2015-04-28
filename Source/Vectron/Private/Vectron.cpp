@@ -1,11 +1,10 @@
 #include "VectronPrivatePCH.h"
-
+#include "VectronBoundingBox.h"
 #include "SlateBasics.h"
 #include "SlateExtras.h"
 
 #include "VectronStyle.h"
 #include "VectronCommands.h"
-
 #include "LevelEditor.h"
 #include "Classes/VectronBoundingBox.h"
 
@@ -248,6 +247,17 @@ void FVectronModule::PluginButtonClicked()
 
 void FVectronModule::OtherPluginButtonClicked()
 {
+	AVectronBoundingBox exp = USelection::GetSelectedObject(0);
+	FFGAContents* fga = exp.getFFGAContents();
+	FString file = FString::Printf(TEXT("%i, %i, %i,\r\n"), fga->GridX, fga->GridY, fga->GridZ);
+	file += FString::Printf(TEXT("%f, %f, %f,\r\n"), fga->Bounds.Min.X, fga->Bounds.Min.Y, fga->Bounds.Min.Z);
+	file += FString::Printf(TEXT("%f, %f, %f,\r\n"), fga->Bounds.Max.X, fga->Bounds.Max.Y, fga->Bounds.Max.Z);
+	for (uint8 i = 0; i < fga->Vectors.Num(); i++)
+	{
+		file += FString::Printf(TEXT("%f, %f, %f,\r\n"), fga->Vectors[i].X, fga->Vectors[i].Y, fga->Vectors[i].Z);
+	}
+	auto appOut = FPaths::GameContentDir() + "vfnew.fga";
+	FFileHelper::SaveStringToFile(file, *appOut);
 	DLOG("AS TEDDY COMMANDS!");
 }
 

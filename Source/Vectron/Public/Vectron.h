@@ -6,6 +6,7 @@
 #include "VectorField/VectorFieldStatic.h"
 #include "Vectron.generated.h"
 
+
 #define DLOG(text) if (GLog) GLog->Log(text)
 #define DLOGN(num) if (GLog) GLog->Log(FString::FromInt(num))
 #define DLOGF(flt) if (GLog) GLog->Log(FString::SanitizeFloat(flt))

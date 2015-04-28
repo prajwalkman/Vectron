@@ -79,6 +79,10 @@ void AVectronBoundingBox::setFFGAContents(FFGAContents* importedValue)
 	m_bbContents = importedValue;
 }
 
+FFGAContents* AVectronBoundingBox::getFFGAContents()
+{
+	return m_bbContents;
+}
 FVector AVectronBoundingBox::getVoxelPosition(int32 x, int32 y, int32 z)
 {
 	FVector origin = GetActorLocation();

@@ -42,7 +42,6 @@ public class Vectron : ModuleRules
 				"CoreUObject",
                 "ContentBrowser",
 
-
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
@@ -53,6 +52,7 @@ public class Vectron : ModuleRules
 			{
 				"UnrealEd",
 				"LevelEditor",
+                "Engine",
 				"Slate", "SlateCore",
                 "ContentBrowser",
 				// ... add private dependencies that you statically link with here ...
