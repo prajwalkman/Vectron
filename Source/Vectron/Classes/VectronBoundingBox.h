@@ -25,7 +25,9 @@ public:
 	virtual void BeginPlay() override;
 	
 	// Called every frame
-	virtual void Tick( float DeltaSeconds ) override;
+	virtual void Tick(float DeltaSeconds) override;
+
+	USceneComponent* emptyRoot;
 
 	FFGAContents* m_bbContents;
 

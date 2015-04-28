@@ -61,3 +61,14 @@ void AVectronPrimitive::PreInitializeComponents()
 
 //	primitiveMeshComponent->SetStaticMesh(primitiveMesh);
 }
+
+FVector AVectronPrimitive::fieldDirectionAtPosition(FVector voxelPosition)
+{
+	if (isVoxelInPrimitive(voxelPosition))
+	{
+		FVector dir = voxelPosition - GetActorLocation();
+		dir.Normalize();
+		return intensity * (dir);
+	}
+	return FVector::ZeroVector;
+}

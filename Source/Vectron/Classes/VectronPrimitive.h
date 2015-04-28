@@ -26,6 +26,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mesh")
 	UStaticMesh* primitiveMesh;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mesh")
+	double intensity;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh")
 	UStaticMeshComponent* primitiveMeshComponent;
 
@@ -34,6 +37,9 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = "Mesh")
 	void reloadPrimitiveSM();
+
+	UFUNCTION(BlueprintCallable, Category = "Voxel Data")
+	FVector fieldDirectionAtPosition(FVector voxelPosition);
 
 	FORCEINLINE void SetupSMComponentWithCollision(UStaticMeshComponent* comp)
 	{

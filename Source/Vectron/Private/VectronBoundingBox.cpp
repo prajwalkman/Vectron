@@ -2,6 +2,7 @@
 
 #include "VectronPrivatePCH.h"
 #include "VectronBoundingBox.h"
+#include "VectronPrimitive.h"
 
 // Sets default values
 //AVectronBoundingBox::AVectronBoundingBox()
@@ -13,6 +14,9 @@ AVectronBoundingBox::AVectronBoundingBox(const class FObjectInitializer& PCIP) :
 	PrimaryActorTick.bCanEverTick = true;
 	DLOG("In Cons");
 
+	emptyRoot = CreateDefaultSubobject<USceneComponent>(TEXT("Empty SceneComponent"));
+
+	RootComponent = emptyRoot;
 }
 
 void AVectronBoundingBox::OnConstruction(const FTransform& ft)
@@ -62,7 +66,18 @@ void AVectronBoundingBox::RenderField()
 			DrawDebugPoint(GetWorld(), vpos, 3.0f, FColor::Black, true);
 			continue;
 		}
-		auto vrayend = vpos + (m_bbContents->Vectors[i] * 20.0);
+		auto dir = m_bbContents->Vectors[i];
+		TArray<USceneComponent*> components;
+		emptyRoot->GetChildrenComponents(false, components);
+		for (USceneComponent* c : components)
+		{
+			auto cc = Cast<AVectronPrimitive>(c);
+			if (cc)
+			{
+				dir += cc->fieldDirectionAtPosition(dir);
+			}
+		}
+		auto vrayend = vpos + (dir * 20.0);
 		DrawDebugDirectionalArrow(GetWorld(), vpos, vrayend, 3.0f, FColor::Black, true);
 	}
 }
