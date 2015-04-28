@@ -250,8 +250,8 @@ void FVectronModule::OtherPluginButtonClicked()
 	FEditorDelegates::LoadSelectedAssetsIfNeeded.Broadcast();
 	USelection *Selection = GEditor->GetSelectedObjects();
 	check(Selection != NULL);
-	AVectronBoundingBox *SelectedActor = Selection->GetTop<UObject>();
-	FFGAContents* fga = exp->getFFGAContents();
+	AVectronBoundingBox *SelectedActor = Cast<AVectronBoundingBox>(Selection->GetTop<UObject>());
+	FFGAContents* fga = SelectedActor->getFFGAContents();
 	FString file = FString::Printf(TEXT("%i, %i, %i,\r\n"), fga->GridX, fga->GridY, fga->GridZ);
 	file += FString::Printf(TEXT("%f, %f, %f,\r\n"), fga->Bounds.Min.X, fga->Bounds.Min.Y, fga->Bounds.Min.Z);
 	file += FString::Printf(TEXT("%f, %f, %f,\r\n"), fga->Bounds.Max.X, fga->Bounds.Max.Y, fga->Bounds.Max.Z);
