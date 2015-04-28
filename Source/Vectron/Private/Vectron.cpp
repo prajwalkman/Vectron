@@ -256,23 +256,22 @@ void FVectronModule::OtherPluginButtonClicked()
 {
 	FEditorDelegates::LoadSelectedAssetsIfNeeded.Broadcast();
 
-	USelection *Selection = GEditor->GetSelectedObjects();
-	check(Selection != NULL);
-	UObject *SelectedActor = (Selection->GetTop<UObject>());
-	if (SelectedActor->GetClass() != AVectronBoundingBox::StaticClass())
-	{
-		DLOG("not bounding box");
+	USelection *Selection = GEditor->GetSelectedActors();
+	AVectronBoundingBox *SelectedActor = Cast<AVectronBoundingBox>(Selection->GetTop<AVectronBoundingBox>());
+	if (SelectedActor == NULL){
+		DLOG("wrong class");
 		return;
 	}
-	AVectronBoundingBox* exp = Cast<AVectronBoundingBox>(SelectedActor);
-	FFGAContents* fga = exp->getFFGAContents();
-	FString file = FString::Printf(TEXT("%i, %i, %i,\r\n"), fga->GridX, fga->GridY, fga->GridZ);
-	file += FString::Printf(TEXT("%f, %f, %f,\r\n"), fga->Bounds.Min.X, fga->Bounds.Min.Y, fga->Bounds.Min.Z);
-	file += FString::Printf(TEXT("%f, %f, %f,\r\n"), fga->Bounds.Max.X, fga->Bounds.Max.Y, fga->Bounds.Max.Z);
-	for (uint8 i = 0; i < fga->Vectors.Num(); i++)
+	DLOG(SelectedActor->GetClass()->GetDesc());
+	FFGAContents* fga = SelectedActor->getFFGAContents();
+	FString file = FString::Printf(TEXT("%i, %i, %i,"), fga->GridX, fga->GridY, fga->GridZ);
+	file += FString::Printf(TEXT("%f, %f, %f,"), fga->Bounds.Min.X, fga->Bounds.Min.Y, fga->Bounds.Min.Z);
+	file += FString::Printf(TEXT("%f, %f, %f,"), fga->Bounds.Max.X, fga->Bounds.Max.Y, fga->Bounds.Max.Z);
+	for (int32 i = 0; i < fga->Vectors.Num(); i++)
 	{
-		file += FString::Printf(TEXT("%f, %f, %f,\r\n"), fga->Vectors[i].X, fga->Vectors[i].Y, fga->Vectors[i].Z);
+		file += FString::Printf(TEXT("%f, %f, %f,"), fga->Vectors[i].X*100, fga->Vectors[i].Y*100, fga->Vectors[i].Z*100);
 	}
+	DLOG(file);
 	auto appOut = FPaths::GameContentDir() + "vfnew.fga";
 	FFileHelper::SaveStringToFile(file, *appOut);
 }
