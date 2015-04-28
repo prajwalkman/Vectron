@@ -58,6 +58,12 @@ void AVectronBoundingBox::BeginPlay()
 void AVectronBoundingBox::RenderField()
 {
 	FlushPersistentDebugLines(GetWorld());
+	TArray<AVectronPrimitive*> primitives;
+	for (auto a : GetWorld()->GetCurrentLevel()->Actors)
+	{
+		auto c = Cast<AVectronPrimitive>(a);
+		if (c) primitives.Add(c);
+	}
 	for (size_t i = 0; i < m_bbContents->Vectors.Num(); i++) {
 		m_bbContents->Vectors[i].Normalize();
 		auto ri = getResolvedIndex(i);
@@ -68,16 +74,9 @@ void AVectronBoundingBox::RenderField()
 			continue;
 		}
 		auto dir = m_bbContents->Vectors[i];
-		TArray<USceneComponent*> components;
-		emptyRoot->GetChildrenComponents(false, components);
-		for (USceneComponent* c : components)
+		for (auto p : primitives)
 		{
-			auto cc = Cast<AVectronPrimitive>(c);
-			if (cc)
-			{
-				DLOG("Found a primitive, adding its value");
-				dir += cc->fieldDirectionAtPosition(dir);
-			}
+			dir += p->fieldDirectionAtPosition(vpos);
 		}
 		auto vrayend = vpos + (dir * 20.0);
 		DrawDebugDirectionalArrow(GetWorld(), vpos, vrayend, 3.0f, FColor::Black, true);
