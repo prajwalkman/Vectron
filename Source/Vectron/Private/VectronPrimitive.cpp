@@ -55,11 +55,9 @@ void AVectronPrimitive::reloadPrimitiveSM()
 	}
 }
 
-void AVectronPrimitive::PostActorCreated()
+void AVectronPrimitive::PreInitializeComponents()
 {
-	Super::PostInitializeComponents();
+	Super::PreInitializeComponents();
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> StaticMeshSpherePrimitive(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Sphere.Shape_Sphere'"));
-	primitiveMesh = StaticMeshSpherePrimitive.Object;
-	primitiveMeshComponent->SetStaticMesh(primitiveMesh);
+//	primitiveMeshComponent->SetStaticMesh(primitiveMesh);
 }
