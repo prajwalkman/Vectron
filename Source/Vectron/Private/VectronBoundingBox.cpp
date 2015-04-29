@@ -78,7 +78,7 @@ void AVectronBoundingBox::RenderField()
 		{
 			dir += p->fieldDirectionAtPosition(vpos);
 		}
-		auto vrayend = vpos + (dir * 20.0);
+		auto vrayend = vpos + dir * 2.0f;
 		DrawDebugDirectionalArrow(GetWorld(), vpos, vrayend, 3.0f, FColor::Black, true);
 	}
 	DrawDebugBox(GetWorld(), GetActorLocation(), m_bbContents->Bounds.GetExtent(), FColor::Blue, true);

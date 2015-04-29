@@ -5,23 +5,37 @@
 #include "GameFramework/Actor.h"
 #include "VectronPrimitive.generated.h"
 
+UENUM(BlueprintType)
+enum class EPrimitiveActorType : uint8 
+{
+	PAT_CONSTANT		UMETA(DisplayName = "Constant"),
+	PAT_ATTRACTIVE		UMETA(DisplayName = "Attractive"),
+	PAT_REPULSIVE		UMETA(DisplayName = "Repulsive")
+};
+
 UCLASS()
 class AVectronPrimitive : public AActor
 {
 	GENERATED_UCLASS_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	AVectronPrimitive();
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	
+
 	// Called every frame
-	virtual void Tick( float DeltaSeconds ) override;
+	virtual void Tick(float DeltaSeconds) override;
 
 	// Called when the actor is spawned
 	virtual void PreInitializeComponents() override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Enum)
+	EPrimitiveActorType primitiveType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Voxel Data")
+	FVector constantForce;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mesh")
 	UStaticMesh* primitiveMesh;

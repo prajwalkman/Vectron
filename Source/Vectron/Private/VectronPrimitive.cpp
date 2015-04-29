@@ -64,11 +64,26 @@ void AVectronPrimitive::PreInitializeComponents()
 
 FVector AVectronPrimitive::fieldDirectionAtPosition(FVector voxelPosition)
 {
+	DLOG("Actor Location: " + GetActorLocation().ToString());
+	FVector dir;
 	if (isVoxelInPrimitive(voxelPosition))
 	{
-		FVector dir = voxelPosition - GetActorLocation();
-		dir.Normalize();
-		return 10.0 * (dir);
+		switch (primitiveType)
+		{
+		case EPrimitiveActorType::PAT_CONSTANT:
+			dir = constantForce;
+			break;
+		case EPrimitiveActorType::PAT_ATTRACTIVE:
+			dir = GetActorLocation() - voxelPosition;
+			break;
+		case EPrimitiveActorType::PAT_REPULSIVE:
+			dir = voxelPosition - GetActorLocation();
+			break;
+		default:
+			dir.Normalize();
+			dir = FVector::ZeroVector;
+		}
+		return intensity * dir;
 	}
 	return FVector::ZeroVector;
 }
