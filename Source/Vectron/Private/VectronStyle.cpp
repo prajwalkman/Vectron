@@ -45,6 +45,7 @@ TSharedRef< FSlateStyleSet > FVectronStyle::Create()
 
 	//Style->Set("ButtonIcon", new IMAGE_BRUSH(TEXT("ButtonIcon"), Icon40x40));
 	Style->Set("Vectron.PluginAction", new IMAGE_BRUSH(TEXT("ButtonIcon"), Icon40x40));
+	Style->Set("Vectron.OtherPluginAction", new IMAGE_BRUSH(TEXT("ButtonIcon"), Icon40x40));
 
 	return Style;
 }

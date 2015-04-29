@@ -46,6 +46,11 @@ public:
 	void PluginButtonClicked();
 	void OtherPluginButtonClicked();
 
+	void Import();
+	void Update();
+	void AddPrimitive();
+	void Export();
+
 	FFGAContents* m_escrowFga;
 
 	AActor* m_activeActor;
@@ -69,4 +74,6 @@ private:
 
 	FCallbackDelegate ManualUpdateDelegate;
 	bool holding = false;
+
+	static TSharedRef<SWidget> MenuCombo(TSharedRef<FUICommandList>);
 };

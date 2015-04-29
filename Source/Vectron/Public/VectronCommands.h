@@ -21,4 +21,5 @@ public:
 
 	TSharedPtr< FUICommandInfo > PluginAction;
 	TSharedPtr< FUICommandInfo > OtherPluginAction;
+	TSharedPtr< FOnGetContent > ContentGetter;
 };

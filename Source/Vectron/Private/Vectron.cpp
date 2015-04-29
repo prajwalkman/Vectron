@@ -7,6 +7,8 @@
 #include "VectronCommands.h"
 #include "LevelEditor.h"
 #include "Classes/VectronBoundingBox.h"
+#include "Classes/VectronPrimitive.h"
+#include "Internationalization/Text.h"
 
 static const FName VectronTabName("Vectron");
 
@@ -160,17 +162,17 @@ void FVectronModule::StartupModule()
 
 	FVectronCommands::Register();
 
-	PluginCommands = MakeShareable(new FUICommandList);
+	//PluginCommands = MakeShareable(new FUICommandList);
 
-	PluginCommands->MapAction(
-		FVectronCommands::Get().PluginAction,
-		FExecuteAction::CreateRaw(this, &FVectronModule::PluginButtonClicked),
-		FCanExecuteAction());
+	//PluginCommands->MapAction(
+	//	FVectronCommands::Get().PluginAction,
+	//	FExecuteAction::CreateRaw(this, &FVectronModule::PluginButtonClicked),
+	//	FCanExecuteAction());
 
-	PluginCommands->MapAction(
-		FVectronCommands::Get().OtherPluginAction,
-		FExecuteAction::CreateRaw(this, &FVectronModule::OtherPluginButtonClicked),
-		FCanExecuteAction());
+	//PluginCommands->MapAction(
+	//	FVectronCommands::Get().OtherPluginAction,
+	//	FExecuteAction::CreateRaw(this, &FVectronModule::OtherPluginButtonClicked),
+	//	FCanExecuteAction());
 
 	FLevelEditorModule& LevelEditorModule = FModuleManager::LoadModuleChecked<FLevelEditorModule>("LevelEditor");
 	{
@@ -186,7 +188,6 @@ void FVectronModule::StartupModule()
 
 		LevelEditorModule.GetToolBarExtensibilityManager()->AddExtender(ToolbarExtender);
 	}
-
 }
 
 void FVectronModule::ShutdownModule()
@@ -197,77 +198,6 @@ void FVectronModule::ShutdownModule()
 	FVectronStyle::Shutdown();
 
 	FVectronCommands::Unregister();
-}
-
-void FVectronModule::PluginButtonClicked()
-{
-	// Put your "OnButtonClicked" stuff here
-
-	if (holding == true)
-	{
-		ManualUpdateDelegate.Execute();
-		GEditor->RedrawAllViewports();
-		return;
-	}
-
-
-	FEditorDelegates::LoadSelectedAssetsIfNeeded.Broadcast();
-
-	USelection *Selection = GEditor->GetSelectedObjects();
-	if (Selection == nullptr) return;
-	UObject *SelectedActor = Selection->GetTop<UObject>();
-	if (SelectedActor == nullptr) return;
-	if (SelectedActor->GetClass() != UVectorFieldStatic::StaticClass())
-	{
-		return;
-	}
-	auto pathName = SelectedActor->GetPathName();
-	pathName = pathName.Replace(TEXT("/Game/"), TEXT(""));
-	FString a, b;
-	pathName.Split(TEXT("."), &a, &b);
-	
-	auto app = FPaths::GameContentDir() + a + ".fga";
-	FString res;
-	if (!FFileHelper::LoadFileToString(res, *app))
-	{
-		DLOG("Could not find file: " + app);
-		return;
-	}
-
-	m_escrowFga = new FFGAContents();
-	if (ParseFGA(m_escrowFga, (TCHAR*)*res, nullptr))
-	{
-		InjectVolumeIntoScene();
-		holding = true;
-	}
-	else
-	{
-		DLOG("Could not parse FGA file.");
-	}
-}
-
-void FVectronModule::OtherPluginButtonClicked()
-{
-	FEditorDelegates::LoadSelectedAssetsIfNeeded.Broadcast();
-
-	USelection *Selection = GEditor->GetSelectedActors();
-	AVectronBoundingBox *SelectedActor = Cast<AVectronBoundingBox>(Selection->GetTop<AVectronBoundingBox>());
-	if (SelectedActor == NULL){
-		DLOG("wrong class");
-		return;
-	}
-	DLOG(SelectedActor->GetClass()->GetDesc());
-	FFGAContents* fga = SelectedActor->getFFGAContents();
-	FString file = FString::Printf(TEXT("%i, %i, %i,\n"), fga->GridX, fga->GridY, fga->GridZ);
-	file += FString::Printf(TEXT("%f, %f, %f,\n"), fga->Bounds.Min.X, fga->Bounds.Min.Y, fga->Bounds.Min.Z);
-	file += FString::Printf(TEXT("%f, %f, %f,\n"), fga->Bounds.Max.X, fga->Bounds.Max.Y, fga->Bounds.Max.Z);
-	for (int32 i = 0; i < fga->Vectors.Num(); i++)
-	{
-		file += FString::Printf(TEXT("%f, %f, %f,\n"), fga->Vectors[i].X*100, fga->Vectors[i].Y*100, fga->Vectors[i].Z*100);
-	}
-	DLOG(file);
-	auto appOut = FPaths::GameContentDir() + "vfnew.fga";
-	FFileHelper::SaveStringToFile(file, *appOut);
 }
 
 void FVectronModule::InjectVolumeIntoScene() {
@@ -292,23 +222,126 @@ void FVectronModule::AddMenuExtension(FMenuBuilder& builder)
 	}
 }
 
+void FVectronModule::Import()
+{
+	FEditorDelegates::LoadSelectedAssetsIfNeeded.Broadcast();
+
+	USelection *Selection = GEditor->GetSelectedObjects();
+	if (Selection == nullptr) return;
+	UObject *SelectedActor = Selection->GetTop<UObject>();
+	if (SelectedActor == nullptr) return;
+	if (SelectedActor->GetClass() != UVectorFieldStatic::StaticClass())
+	{
+		return;
+	}
+	auto pathName = SelectedActor->GetPathName();
+	pathName = pathName.Replace(TEXT("/Game/"), TEXT(""));
+	FString a, b;
+	pathName.Split(TEXT("."), &a, &b);
+
+	auto app = FPaths::GameContentDir() + a + ".fga";
+	FString res;
+	if (!FFileHelper::LoadFileToString(res, *app))
+	{
+		DLOG("Could not find file: " + app);
+		return;
+	}
+
+	m_escrowFga = new FFGAContents();
+	if (ParseFGA(m_escrowFga, (TCHAR*)*res, nullptr))
+	{
+		InjectVolumeIntoScene();
+		holding = true;
+	}
+	else
+	{
+		DLOG("Could not parse FGA file.");
+	}
+}
+
+void FVectronModule::Update()
+{
+	ManualUpdateDelegate.Execute();
+	GEditor->RedrawAllViewports();
+}
+
+void FVectronModule::AddPrimitive()
+{
+	auto World = GEditor->GetEditorWorldContext().World();
+	auto Level = World->GetCurrentLevel();
+	GEditor->AddActor(Level, AVectronPrimitive::StaticClass(), FTransform::Identity);
+}
+
+void FVectronModule::Export()
+{
+	FEditorDelegates::LoadSelectedAssetsIfNeeded.Broadcast();
+
+	USelection *Selection = GEditor->GetSelectedActors();
+	AVectronBoundingBox *SelectedActor = Cast<AVectronBoundingBox>(Selection->GetTop<AVectronBoundingBox>());
+	if (SelectedActor == NULL){
+		DLOG("wrong class");
+		return;
+	}
+	DLOG(SelectedActor->GetClass()->GetDesc());
+	FFGAContents* fga = SelectedActor->getFFGAContents();
+	FString file = FString::Printf(TEXT("%i, %i, %i,\n"), fga->GridX, fga->GridY, fga->GridZ);
+	file += FString::Printf(TEXT("%f, %f, %f,\n"), fga->Bounds.Min.X, fga->Bounds.Min.Y, fga->Bounds.Min.Z);
+	file += FString::Printf(TEXT("%f, %f, %f,\n"), fga->Bounds.Max.X, fga->Bounds.Max.Y, fga->Bounds.Max.Z);
+	for (int32 i = 0; i < fga->Vectors.Num(); i++)
+	{
+		file += FString::Printf(TEXT("%f, %f, %f,\n"), fga->Vectors[i].X * 100, fga->Vectors[i].Y * 100, fga->Vectors[i].Z * 100);
+	}
+	//DLOG(file);
+	auto appOut = FPaths::GameContentDir() + "vfnew.fga";
+	FFileHelper::SaveStringToFile(file, *appOut);
+}
+
 void FVectronModule::AddToolbarExtension(FToolBarBuilder &builder)
 {
-	builder.AddToolBarButton(
-		FVectronCommands::Get().PluginAction,
-		NAME_None,
-		FVectronCommands::Get().PluginAction->GetLabel(),
-		FVectronCommands::Get().PluginAction->GetDescription(),
-		FVectronCommands::Get().PluginAction->GetIcon(),
-		NAME_None);
+	builder.AddSeparator();
 
-	builder.AddToolBarButton(
-		FVectronCommands::Get().OtherPluginAction,
-		NAME_None,
-		FVectronCommands::Get().OtherPluginAction->GetLabel(),
-		FVectronCommands::Get().OtherPluginAction->GetDescription(),
-		FVectronCommands::Get().OtherPluginAction->GetIcon(),
-		NAME_None);
+	//builder.AddToolBarButton(
+	//	FVectronCommands::Get().PluginAction,
+	//	NAME_None,
+	//	FText::FromString(FString("Load/Update")),
+	//	FVectronCommands::Get().PluginAction->GetDescription(),
+	//	FVectronCommands::Get().PluginAction->GetIcon(),
+	//	NAME_None);
+
+	//builder.AddToolBarButton(
+	//	FVectronCommands::Get().OtherPluginAction,
+	//	NAME_None,
+	//	FText::FromString(FString("Save")),
+	//	FVectronCommands::Get().OtherPluginAction->GetDescription(),
+	//	FVectronCommands::Get().OtherPluginAction->GetIcon(),
+	//	NAME_None);
+
+	TSharedRef<FUICommandList> nothing(new FUICommandList());
+	builder.AddComboButton(
+		FUIAction(),
+		FOnGetContent::CreateStatic(&FVectronModule::MenuCombo, nothing),
+		FText::FromString("Vectron"),
+		FText::FromString("Vectron Actions"),
+		FVectronCommands::Get().PluginAction->GetIcon());
+}
+
+TSharedRef<SWidget> FVectronModule::MenuCombo(TSharedRef<FUICommandList> InCmdList)
+{
+	FMenuBuilder MenuBuilder(true, NULL);
+
+	FUIAction LoadAction(FExecuteAction::CreateRaw(&FVectronModule::Get(), &FVectronModule::Import));
+	MenuBuilder.AddMenuEntry(FText::FromString("Import"), FText::FromString("Load Vector Field selected in ContentBrowser"), FSlateIcon(), LoadAction);
+
+	FUIAction AddPrimitive(FExecuteAction::CreateRaw(&FVectronModule::Get(), &FVectronModule::AddPrimitive));
+	MenuBuilder.AddMenuEntry(FText::FromString("Add Effector"), FText::FromString("Adds a primitive that can affect the field"), FSlateIcon(), AddPrimitive);
+
+	FUIAction UpdateAction(FExecuteAction::CreateRaw(&FVectronModule::Get(), &FVectronModule::Update));
+	MenuBuilder.AddMenuEntry(FText::FromString("Update"), FText::FromString("Update loaded field with primitive influences"), FSlateIcon(), UpdateAction);
+
+	FUIAction SaveAction(FExecuteAction::CreateRaw(&FVectronModule::Get(), &FVectronModule::Export));
+	MenuBuilder.AddMenuEntry(FText::FromString("Export"), FText::FromString("Save FBoundingBox selected in scene"), FSlateIcon(), SaveAction);
+
+	return MenuBuilder.MakeWidget();
 }
 
 #undef LOCTEXT_NAMESPACE
