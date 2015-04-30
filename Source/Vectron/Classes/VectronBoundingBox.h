@@ -27,6 +27,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaSeconds) override;
 
+	virtual bool ShouldTickIfViewportsOnly() const;
+
 	USceneComponent* emptyRoot;
 
 	FFGAContents* m_bbContents;
@@ -39,6 +41,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Voxel Data")
 	FVector getResolvedIndex(int32 index);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Voxel Data")
+	float intensity = 10.0f;
 
 	void ManualUpdate();
 

@@ -12,16 +12,19 @@ AVectronBoundingBox::AVectronBoundingBox(const class FObjectInitializer& PCIP) :
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	DLOG("In Cons");
 
 	emptyRoot = CreateDefaultSubobject<USceneComponent>(TEXT("Empty SceneComponent"));
 
 	RootComponent = emptyRoot;
 }
 
+bool AVectronBoundingBox::ShouldTickIfViewportsOnly() const
+{
+	return true;
+}
+
 void AVectronBoundingBox::OnConstruction(const FTransform& ft)
 {
-	DLOG("InOnCons");
 	Super::OnConstruction(ft);
 
 	if (FVectronModule::Get().m_escrowFga == nullptr) return;
@@ -37,7 +40,6 @@ void AVectronBoundingBox::PreInitializeComponents()
 
 	setFFGAContents(FVectronModule::Get().m_escrowFga);
 
-	DLOG("In PreInitComp");
 	
 }
 
@@ -46,7 +48,6 @@ void AVectronBoundingBox::PostInitializeComponents()
 
 	Super::PostInitializeComponents();
 
-	DLOG("In PostInitComp");
 }
 
 // Called when the game starts or when spawned
@@ -58,12 +59,7 @@ void AVectronBoundingBox::BeginPlay()
 void AVectronBoundingBox::RenderField()
 {
 	FlushPersistentDebugLines(GetWorld());
-	TArray<AVectronPrimitive*> primitives;
-	for (auto a : GetWorld()->GetCurrentLevel()->Actors)
-	{
-		auto c = Cast<AVectronPrimitive>(a);
-		if (c) primitives.Add(c);
-	}
+
 	for (size_t i = 0; i < m_bbContents->Vectors.Num(); i++) {
 		m_bbContents->Vectors[i].Normalize();
 		auto ri = getResolvedIndex(i);
@@ -73,12 +69,12 @@ void AVectronBoundingBox::RenderField()
 			DrawDebugPoint(GetWorld(), vpos, 3.0f, FColor::Black, true);
 			continue;
 		}
-		auto dir = m_bbContents->Vectors[i];
-		for (auto p : primitives)
+		FVector dir = m_bbContents->Vectors[i];
+		for (auto p : FVectronModule::Get().ActivePrimitives)
 		{
 			dir += p->fieldDirectionAtPosition(vpos);
 		}
-		auto vrayend = vpos + dir * 2.0f;
+		auto vrayend = vpos + dir * intensity;
 		DrawDebugDirectionalArrow(GetWorld(), vpos, vrayend, 3.0f, FColor::Black, true);
 	}
 	DrawDebugBox(GetWorld(), GetActorLocation(), m_bbContents->Bounds.GetExtent(), FColor::Blue, true);
@@ -89,6 +85,8 @@ void AVectronBoundingBox::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
 
+	if (FVectronModule::Get().m_escrowFga == nullptr) return;
+	RenderField();
 }
 
 void AVectronBoundingBox::setFFGAContents(FFGAContents* importedValue)
@@ -151,6 +149,5 @@ FVector AVectronBoundingBox::getResolvedIndex(int32 index)
 
 void AVectronBoundingBox::ManualUpdate()
 {
-	DLOG("MANUALLY UPDATING STUFF!");
 	RenderField();
 }

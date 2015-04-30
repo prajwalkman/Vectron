@@ -31,25 +31,29 @@ public:
 	// Called when the actor is spawned
 	virtual void PreInitializeComponents() override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Enum)
+	virtual void OnConstruction(const FTransform& Transform) override;
+
+	~AVectronPrimitive();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Voxel Data")
 	EPrimitiveActorType primitiveType;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Voxel Data")
 	FVector constantForce;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mesh")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Voxel Data")
 	UStaticMesh* primitiveMesh;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mesh")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Voxel Data")
 	float intensity;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Voxel Data")
 	UStaticMeshComponent* primitiveMeshComponent;
 
 	UFUNCTION(BlueprintCallable, Category = "Voxel Data")
 	bool isVoxelInPrimitive(FVector voxelPosition);
 	
-	UFUNCTION(BlueprintCallable, Category = "Mesh")
+	UFUNCTION(BlueprintCallable, Category = "Voxel Data")
 	void reloadPrimitiveSM();
 
 	UFUNCTION(BlueprintCallable, Category = "Voxel Data")

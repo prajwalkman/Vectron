@@ -252,6 +252,7 @@ void FVectronModule::Import()
 	{
 		InjectVolumeIntoScene();
 		holding = true;
+		ActivePrimitives.Empty();
 	}
 	else
 	{
@@ -335,8 +336,8 @@ TSharedRef<SWidget> FVectronModule::MenuCombo(TSharedRef<FUICommandList> InCmdLi
 	FUIAction AddPrimitive(FExecuteAction::CreateRaw(&FVectronModule::Get(), &FVectronModule::AddPrimitive));
 	MenuBuilder.AddMenuEntry(FText::FromString("Add Effector"), FText::FromString("Adds a primitive that can affect the field"), FSlateIcon(), AddPrimitive);
 
-	FUIAction UpdateAction(FExecuteAction::CreateRaw(&FVectronModule::Get(), &FVectronModule::Update));
-	MenuBuilder.AddMenuEntry(FText::FromString("Update"), FText::FromString("Update loaded field with primitive influences"), FSlateIcon(), UpdateAction);
+	//FUIAction UpdateAction(FExecuteAction::CreateRaw(&FVectronModule::Get(), &FVectronModule::Update));
+	//MenuBuilder.AddMenuEntry(FText::FromString("Update"), FText::FromString("Update loaded field with primitive influences"), FSlateIcon(), UpdateAction);
 
 	FUIAction SaveAction(FExecuteAction::CreateRaw(&FVectronModule::Get(), &FVectronModule::Export));
 	MenuBuilder.AddMenuEntry(FText::FromString("Export"), FText::FromString("Save FBoundingBox selected in scene"), FSlateIcon(), SaveAction);

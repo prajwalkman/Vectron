@@ -17,6 +17,15 @@ AVectronPrimitive::AVectronPrimitive(const class FObjectInitializer& PCIP) : Sup
 	SetupSMComponentWithCollision(primitiveMeshComponent);
 	
 	RootComponent = primitiveMeshComponent;
+
+}
+
+void AVectronPrimitive::OnConstruction(const FTransform& Transform)
+{
+	Super::OnConstruction(Transform);
+
+	if (!FVectronModule::Get().ActivePrimitives.Contains(this))
+		FVectronModule::Get().ActivePrimitives.Add(this);
 }
 
 // Called when the game starts or when spawned
@@ -64,7 +73,7 @@ void AVectronPrimitive::PreInitializeComponents()
 
 FVector AVectronPrimitive::fieldDirectionAtPosition(FVector voxelPosition)
 {
-	DLOG("Actor Location: " + GetActorLocation().ToString());
+	//DLOG("Actor Location: " + GetActorLocation().ToString());
 	FVector dir;
 	if (isVoxelInPrimitive(voxelPosition))
 	{
@@ -86,4 +95,9 @@ FVector AVectronPrimitive::fieldDirectionAtPosition(FVector voxelPosition)
 		return intensity * dir;
 	}
 	return FVector::ZeroVector;
+}
+
+AVectronPrimitive::~AVectronPrimitive()
+{
+	FVectronModule::Get().ActivePrimitives.Remove(this);
 }

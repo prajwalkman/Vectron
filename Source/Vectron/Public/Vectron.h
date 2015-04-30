@@ -4,6 +4,7 @@
 
 #include "ModuleManager.h"
 #include "VectorField/VectorFieldStatic.h"
+#include "Classes/VectronPrimitive.h"
 #include "Vectron.generated.h"
 
 
@@ -59,6 +60,8 @@ public:
 	{
 		return FModuleManager::LoadModuleChecked< FVectronModule >("Vectron");
 	}
+
+	TArray<AVectronPrimitive*> ActivePrimitives;
 
 private:
 
