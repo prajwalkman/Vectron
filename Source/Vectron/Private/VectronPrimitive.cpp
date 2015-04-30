@@ -57,13 +57,6 @@ bool AVectronPrimitive::isVoxelInPrimitive(FVector voxelPosition)
 	}
 }
 
-void AVectronPrimitive::PreInitializeComponents()
-{
-	Super::PreInitializeComponents();
-
-	//primitiveMeshComponent->SetStaticMesh(primitiveMesh);
-}
-
 FVector AVectronPrimitive::fieldDirectionAtPosition(FVector voxelPosition)
 {
 	//DLOG("Actor Location: " + GetActorLocation().ToString());
@@ -82,9 +75,9 @@ FVector AVectronPrimitive::fieldDirectionAtPosition(FVector voxelPosition)
 			dir = voxelPosition - GetActorLocation();
 			break;
 		default:
-			dir.Normalize();
 			dir = FVector::ZeroVector;
 		}
+		dir.Normalize();
 		return intensity * dir;
 	}
 	return FVector::ZeroVector;

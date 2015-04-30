@@ -28,9 +28,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaSeconds) override;
 
-	// Called when the actor is spawned
-	virtual void PreInitializeComponents() override;
-
 	virtual void OnConstruction(const FTransform& Transform) override;
 
 	virtual void PostEditMove(bool bFinished) override;
