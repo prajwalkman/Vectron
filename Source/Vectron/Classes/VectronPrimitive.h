@@ -33,6 +33,8 @@ public:
 
 	virtual void OnConstruction(const FTransform& Transform) override;
 
+	virtual void PostEditMove(bool bFinished) override;
+
 	~AVectronPrimitive();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Voxel Data")
@@ -42,9 +44,6 @@ public:
 	FVector constantForce;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Voxel Data")
-	UStaticMesh* primitiveMesh;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Voxel Data")
 	float intensity;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Voxel Data")
@@ -52,9 +51,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Voxel Data")
 	bool isVoxelInPrimitive(FVector voxelPosition);
-	
-	UFUNCTION(BlueprintCallable, Category = "Voxel Data")
-	void reloadPrimitiveSM();
 
 	UFUNCTION(BlueprintCallable, Category = "Voxel Data")
 	FVector fieldDirectionAtPosition(FVector voxelPosition);

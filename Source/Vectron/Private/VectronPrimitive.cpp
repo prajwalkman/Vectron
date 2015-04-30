@@ -26,6 +26,8 @@ void AVectronPrimitive::OnConstruction(const FTransform& Transform)
 
 	if (!FVectronModule::Get().ActivePrimitives.Contains(this))
 		FVectronModule::Get().ActivePrimitives.Add(this);
+
+	FVectronModule::Get().ManualUpdateDelegate.ExecuteIfBound();
 }
 
 // Called when the game starts or when spawned
@@ -52,15 +54,6 @@ bool AVectronPrimitive::isVoxelInPrimitive(FVector voxelPosition)
 	else
 	{
 		return false;
-	}
-}
-
-void AVectronPrimitive::reloadPrimitiveSM()
-{
-	if (primitiveMesh != nullptr)
-	{
-		SetupSMComponentWithCollision(primitiveMeshComponent);
-		primitiveMeshComponent->SetStaticMesh(primitiveMesh);
 	}
 }
 
@@ -100,4 +93,9 @@ FVector AVectronPrimitive::fieldDirectionAtPosition(FVector voxelPosition)
 AVectronPrimitive::~AVectronPrimitive()
 {
 	FVectronModule::Get().ActivePrimitives.Remove(this);
+}
+
+void AVectronPrimitive::PostEditMove(bool bFinished)
+{
+	FVectronModule::Get().ManualUpdateDelegate.ExecuteIfBound();
 }

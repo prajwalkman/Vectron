@@ -62,6 +62,7 @@ public:
 	}
 
 	TArray<AVectronPrimitive*> ActivePrimitives;
+	FCallbackDelegate ManualUpdateDelegate;
 
 private:
 
@@ -75,7 +76,6 @@ private:
 
 	TSharedPtr<class FUICommandList> PluginCommands;
 
-	FCallbackDelegate ManualUpdateDelegate;
 	bool holding = false;
 
 	static TSharedRef<SWidget> MenuCombo(TSharedRef<FUICommandList>);

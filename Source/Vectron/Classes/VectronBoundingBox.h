@@ -27,7 +27,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaSeconds) override;
 
-	virtual bool ShouldTickIfViewportsOnly() const;
+	virtual void PostEditMove(bool bFinished) override;
 
 	USceneComponent* emptyRoot;
 
@@ -46,5 +46,4 @@ public:
 	float intensity = 10.0f;
 
 	void ManualUpdate();
-
 };
