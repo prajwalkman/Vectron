@@ -25,6 +25,9 @@ Also in it's components, for the primitive to affect a field, you must assign it
 - Attractive Attracts Particles towards the mesh.
 - Repulsive forces them away from the primitive
 - Constant creates a constant force in a specified direction
+You can also assign Intensity here.
+You may change your Field in real time by moving your primitive through your field. 
+This only works in editor.
 
 ###Export
 To Export your vector field to a FGA File, select your AVectronBoundingBox in the outliner and select Vectron->Export.
