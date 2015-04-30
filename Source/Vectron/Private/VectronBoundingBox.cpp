@@ -69,6 +69,7 @@ void AVectronBoundingBox::RenderField()
 			dir += p->fieldDirectionAtPosition(vpos);
 		}
 		auto vrayend = vpos + dir * intensity;
+		FVectronModule::Get().m_escrowFga->Vectors[i] = dir;
 		DrawDebugDirectionalArrow(GetWorld(), vpos, vrayend, 3.0f, FColor::Black, true);
 	}
 	DrawDebugBox(GetWorld(), GetActorLocation(), m_bbContents->Bounds.GetExtent(), FColor::Blue, true);
