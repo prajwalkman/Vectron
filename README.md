@@ -4,9 +4,9 @@ Vectron is a In Engine Vector Field Editor Plugin for Unreal Engine 4
 
 Vectron Can:
 
-- Import Existing FGA Files
-- Manipulate them using Primitive effectors that can Attract, Repulse, or give of a Constant force.
-- Export them as FGA Files For use in UE4 particle systems.
+- Import existing FGA files
+- Manipulate them using Primitive effectors that can Attract, Repulse, or give off a Constant force.
+- Export them as FGA Files for use in UE4 particle systems.
 
 This is all done in the UE4 Editor window using a vector field analogue, AVectronBoundingBox and effector primitives.
 
