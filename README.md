@@ -6,6 +6,7 @@ Vectron Can:
 
 - Import existing FGA files
 - Manipulate them using Primitive effectors that can Attract, Repulse, or give off a Constant force.
+- Create complex Vector Fields using a system similar to UE's BSP brushes.
 - Export them as FGA Files for use in UE4 particle systems.
 
 This is all done in the UE4 Editor window using a vector field analogue, AVectronBoundingBox and effector primitives.
@@ -21,10 +22,10 @@ You can change the intensity of the vector field in it's components
 To change a AVectronBoundingBox select Vectron->Add Effector
 This creates a Vectron Primitive Effector which can be moved about the world.
 In order to have it affect a Vector Field, it must be assigned a static mesh. you can do this in its components.
-Also in it's components, for the primitive to affect a field, you must assign it one of 3 forces, Attractive, Constant, and Repulsive.
-- Attractive Attracts Particles towards the mesh.
-- Repulsive forces them away from the primitive
-- Constant creates a constant force in a specified direction
+Also in it's components, for the primitive to affect a field, you must assign it one of 3 forces: Attractive, Constant, or Repulsive.
+- `Attractive` Attracts Particles towards the mesh.
+- `Repulsive` forces them away from the primitive
+- `Constant` creates a constant force in a specified direction
 You can also assign Intensity here.
 You may change your Field in real time by moving your primitive through your field. 
 This only works in editor.
