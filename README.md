@@ -1,5 +1,5 @@
 #Vectron
-##A UE4 vector field editor 
+##A UE4 vector field editor (*proof of concept*)
 Vectron is a In Engine Vector Field Editor Plugin for Unreal Engine 4
 
 Vectron Can:
